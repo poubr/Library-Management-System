@@ -7,7 +7,7 @@ namespace LibraryManagementSystem.Domain.src.Entities
         public DateTime CheckekOutDate { get; set; }
         public DateTime DueDate { get; set; }
         public DateTime ReturnDate { get; set; } = default!;
-        public String Status {get; set; } = String.Empty;
+        public Status Status {get; set; } = Status.Reserved;
         public float Fee {get; set; }
     }
 

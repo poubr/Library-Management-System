@@ -15,16 +15,16 @@ namespace LibraryManagementSystem.Controller.src.Controllers
             _genreService = baseService;
         }
 
-        [HttpPost]
         [Authorize(Roles = "Admin")]
+        [HttpPost]
         public override async Task<ActionResult<GenreReadDto>> CreateOne([FromBody] GenreCreateDto dto)
         {
             GenreReadDto createdObject = await _genreService.CreateOne(dto);
-            return CreatedAtAction("Created", createdObject);
+            return CreatedAtAction("CreateOne", createdObject);
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPatch("{id}:Guid")]
+        [HttpPatch("{id:guid}")]
         public override async Task<ActionResult<GenreReadDto>> UpdateOne([FromRoute] Guid id, [FromBody] GenreUpdateDto updateDto)
         {
             GenreReadDto updatedEntity = await _genreService.UpdateOne(id, updateDto);
@@ -32,7 +32,7 @@ namespace LibraryManagementSystem.Controller.src.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id}:Guid")]
+        [HttpDelete("{id:guid}")]
         public override async Task<ActionResult<bool>> DeleteOne([FromRoute] Guid id)
         {
             return Ok(await _genreService.DeleteOne(id));

@@ -10,6 +10,6 @@ namespace LibraryManagementSystem.Domain.src.Entities
         public int YearOfPublishing { get; set; }
         public String Language { get; set; } = string.Empty;
         public String Publisher { get; set; } = string.Empty;
-        public List<Author> Authors { get; set; } = default!;
+        public List<Author> Authors { get; set; } = new List<Author>();
     }
 }

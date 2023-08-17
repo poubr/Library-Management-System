@@ -37,7 +37,7 @@ namespace LibraryManagementSystem.Service.src.Implementations
             var foundItem = await _baseRepository.GetOne(id);
             if (foundItem != null)
             {
-                var updatedItem = await _baseRepository.UpdateOne(foundItem, _mapper.Map<T>(updatedEntity));
+                var updatedItem = await _baseRepository.UpdateOne(_mapper.Map<T>(updatedEntity));
                 return _mapper.Map<TReadDto>(updatedItem);
                 
             }

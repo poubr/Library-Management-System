@@ -19,10 +19,10 @@ namespace LibraryManagementSystem.Controller.src.Controllers
         public virtual async Task<ActionResult<TReadDto>> CreateOne([FromBody] TCreateDto dto)
         {
             TReadDto createdObject = await _baseService.CreateOne(dto);
-            return CreatedAtAction("Created", createdObject);
+            return CreatedAtAction("CreateOne", createdObject);
         }
 
-        [HttpGet("{id}:Guid")]
+        [HttpGet("{id:guid}")]
         public virtual async Task<ActionResult<IEnumerable<TReadDto>>> GetOne([FromRoute] Guid id)
         {
             return Ok(await _baseService.GetOne(id));  
@@ -34,14 +34,14 @@ namespace LibraryManagementSystem.Controller.src.Controllers
             return Ok(await _baseService.GetAll(queryOptions));
         }
 
-        [HttpPatch("{id}:Guid")]
+        [HttpPatch("{id:guid}")]
         public virtual async Task<ActionResult<TReadDto>> UpdateOne([FromRoute] Guid id, [FromBody] TUpdateDto updateDto)
         {
             TReadDto updatedEntity = await _baseService.UpdateOne(id, updateDto);
             return Ok(updatedEntity);
         }
 
-        [HttpDelete("{id}:Guid")]
+        [HttpDelete("{id:guid}")]
         public virtual async Task<ActionResult<bool>> DeleteOne([FromRoute] Guid id)
         {
             return Ok(await _baseService.DeleteOne(id));

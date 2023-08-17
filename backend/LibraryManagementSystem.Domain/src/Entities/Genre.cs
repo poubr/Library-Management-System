@@ -2,7 +2,7 @@ namespace LibraryManagementSystem.Domain.src.Entities
 {
     public class Genre : BaseEntity
     {
-        public string GenreName { get; set;} = "Other";
+        public GenreName GenreName { get; set;} = GenreName.Other;
     }
 
     public enum GenreName

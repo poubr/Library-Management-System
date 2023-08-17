@@ -23,7 +23,7 @@ namespace LibraryManagementSystem.Infrastructure.src.Implementations
 
         public async Task<User> CreateAdmin(User user)
         {
-            user.Role = Role.Admin;
+            user.Roles = Roles.Admin;
             await _users.AddAsync(user);
             return user;
         }
@@ -38,14 +38,13 @@ namespace LibraryManagementSystem.Infrastructure.src.Implementations
         public async Task<User> VerifyCredentials(string email, string password)
         {
             var foundUser = await _users.FirstOrDefaultAsync(user => user.Email == email);
-            if (foundUser != null && BCryptNet.Verify(foundUser.Password, password))
+            if (foundUser != null && BCryptNet.Verify(password, foundUser.Password))
             {
                 return foundUser;
             }
             else
             {
                 throw new UnauthorizedAccessException("Invalid credentials.");
-                // TODO: check for better exception
             }
         }
     }

@@ -37,7 +37,7 @@ namespace LibraryManagementSystem.Service.src.Implementations
                     .WithSecret(jwtSecretKey)
                     .AddClaim(ClaimTypes.Email, foundUser.Email)
                     .AddClaim(ClaimTypes.NameIdentifier, foundUser.Id)
-                    .AddClaim(ClaimTypes.Role, foundUser.Role.ToString())
+                    .AddClaim(ClaimTypes.Role, foundUser.Roles.ToString())
                     .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(15).ToUnixTimeSeconds())
                     .MustVerifySignature()
                     .Encode();
