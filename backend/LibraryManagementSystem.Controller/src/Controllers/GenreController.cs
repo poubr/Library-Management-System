@@ -36,9 +36,6 @@ namespace LibraryManagementSystem.Controller.src.Controllers
         public override async Task<ActionResult<bool>> DeleteOne([FromRoute] Guid id)
         {
             return Ok(await _genreService.DeleteOne(id));
-            // TODO:
-            // NoContent() might be a better option here,
-            // change when doing the errors and having if elses
         }
     }
 }

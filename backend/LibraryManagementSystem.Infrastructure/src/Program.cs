@@ -1,9 +1,11 @@
 using System.Security.Claims;
 using JWT.Algorithms;
 using JWT.Extensions.AspNetCore;
+using LibraryManagementSystem.Domain.src.Entities;
 using LibraryManagementSystem.Domain.src.RepositoryInterfaces;
 using LibraryManagementSystem.Infrastructure.src.Database;
 using LibraryManagementSystem.Infrastructure.src.Implementations;
+using LibraryManagementSystem.Infrastructure.src.Middleware;
 using LibraryManagementSystem.Service.src.Abstractions;
 using LibraryManagementSystem.Service.src.Implementations;
 using Microsoft.OpenApi.Models;
@@ -63,6 +65,8 @@ builder.Services.AddAuthentication(JwtAuthenticationDefaults.AuthenticationSchem
 // Register JwT srvice.
 builder.Services.AddSingleton<IAlgorithmFactory>(new HMACSHAAlgorithmFactory());
 
+builder.Services.AddSingleton<ErrorHandlerMiddleware>();
+
 // Configure the routes.
 builder.Services.Configure<RouteOptions>(options =>
 {
@@ -70,14 +74,14 @@ builder.Services.Configure<RouteOptions>(options =>
 });
 
 // Register role based policy.
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AdminOnly", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
-});
+//builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+
+//                                              <<<<<----- remove if so it also deploys
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -85,6 +89,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.UseAuthentication();
 

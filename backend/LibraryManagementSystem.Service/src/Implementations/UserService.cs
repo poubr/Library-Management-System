@@ -4,6 +4,7 @@ using LibraryManagementSystem.Domain.src.Entities;
 using LibraryManagementSystem.Domain.src.RepositoryInterfaces;
 using LibraryManagementSystem.Service.src.Abstractions;
 using LibraryManagementSystem.Service.src.Dtos;
+using LibraryManagementSystem.Service.src.Shared;
 
 namespace LibraryManagementSystem.Service.src.Implementations
 {
@@ -35,7 +36,7 @@ namespace LibraryManagementSystem.Service.src.Implementations
             }
             else
             {
-                throw new Exception();
+                throw ExceptionHandler.CreateAdminException();
             }  
         }
 
@@ -50,7 +51,7 @@ namespace LibraryManagementSystem.Service.src.Implementations
             }
             else
             {
-                throw new Exception();
+                throw ExceptionHandler.UpdatePasswordException();
             }
         }
     }

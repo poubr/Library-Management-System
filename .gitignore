@@ -1,4 +1,5 @@
 ### Ignore unnecessary files in backend
+*.http
 
 # User-specific files
 backend/appsettings.json

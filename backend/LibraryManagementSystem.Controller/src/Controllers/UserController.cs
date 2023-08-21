@@ -39,7 +39,7 @@ namespace LibraryManagementSystem.Controller.src.Controllers
             return Ok(updatedEntity);
         }   
 
-        [HttpPatch()]       // not sure if this the right way though
+        [HttpPatch()]
         public async Task<ActionResult<UserReadDto>> UpdateSelf([FromBody] UserUpdateDto updateDto)
         {
             string id = HttpContext.User.Claims.FirstOrDefault(
@@ -59,7 +59,6 @@ namespace LibraryManagementSystem.Controller.src.Controllers
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpGet]
         public override async Task<ActionResult<IEnumerable<UserReadDto>>> GetAll([FromQuery] QueryOptions queryOptions)
         {
             return Ok(await _userService.GetAll(queryOptions));

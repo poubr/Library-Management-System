@@ -45,9 +45,6 @@ namespace LibraryManagementSystem.Controller.src.Controllers
         public virtual async Task<ActionResult<bool>> DeleteOne([FromRoute] Guid id)
         {
             return Ok(await _baseService.DeleteOne(id));
-            // TODO:
-            // NoContent() might be a better option here,
-            // change when doing the errors and having if elses
         }
     }
 }

@@ -9,6 +9,7 @@ using JWT.Builder;
 using LibraryManagementSystem.Domain.src.RepositoryInterfaces;
 using LibraryManagementSystem.Service.src.Abstractions;
 using LibraryManagementSystem.Service.src.Dtos;
+using LibraryManagementSystem.Service.src.Shared;
 using Microsoft.Extensions.Configuration;
 
 namespace LibraryManagementSystem.Service.src.Implementations
@@ -37,15 +38,15 @@ namespace LibraryManagementSystem.Service.src.Implementations
                     .WithSecret(jwtSecretKey)
                     .AddClaim(ClaimTypes.Email, foundUser.Email)
                     .AddClaim(ClaimTypes.NameIdentifier, foundUser.Id)
-                    .AddClaim(ClaimTypes.Role, foundUser.Roles.ToString())
-                    .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(15).ToUnixTimeSeconds())
+                    .AddClaim(ClaimTypes.Role, foundUser.Role.ToString())
+                    .AddClaim("exp", DateTimeOffset.UtcNow.AddMinutes(60).ToUnixTimeSeconds())
                     .MustVerifySignature()
                     .Encode();
                 return token;
             }
             else
             {
-                throw new UnauthorizedAccessException("Invalid credentials.");
+                throw ExceptionHandler.UnauthorizedException();
             }
         }
     }

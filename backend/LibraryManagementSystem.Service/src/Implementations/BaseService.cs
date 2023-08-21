@@ -2,6 +2,7 @@ using AutoMapper;
 using LibraryManagementSystem.Domain.src.RepositoryInterfaces;
 using LibraryManagementSystem.Domain.src.Shared;
 using LibraryManagementSystem.Service.src.Abstractions;
+using LibraryManagementSystem.Service.src.Shared;
 
 namespace LibraryManagementSystem.Service.src.Implementations
 {
@@ -18,18 +19,39 @@ namespace LibraryManagementSystem.Service.src.Implementations
 
         public async Task<TReadDto> GetOne(Guid id)
         {
-            return _mapper.Map<TReadDto>( await _baseRepository.GetOne(id));
+            try
+            {
+                return _mapper.Map<TReadDto>( await _baseRepository.GetOne(id));
+            }
+            catch
+            {
+                throw ExceptionHandler.NotFoundException();
+            }
         }
 
         public async Task<IEnumerable<TReadDto>> GetAll(QueryOptions queryOptions)
         {
-            return _mapper.Map<IEnumerable<TReadDto>>(await _baseRepository.GetAll(queryOptions));
+            try
+            {
+                return _mapper.Map<IEnumerable<TReadDto>>(await _baseRepository.GetAll(queryOptions));
+            }
+            catch
+            {
+                throw ExceptionHandler.NotFoundException();
+            }            
         }
 
         public virtual async Task<TReadDto> CreateOne(TCreateDto newItem)
         {
-            var newEntity = await _baseRepository.CreateOne(_mapper.Map<T>(newItem));
-            return _mapper.Map<TReadDto>(newEntity);
+            try
+            {
+                var newEntity = await _baseRepository.CreateOne(_mapper.Map<T>(newItem));
+                return _mapper.Map<TReadDto>(newEntity);
+            }
+            catch
+            {
+                throw ExceptionHandler.CreateException();
+            }
         }
 
         public async Task<TReadDto> UpdateOne(Guid id, TUpdateDto updatedEntity)
@@ -43,7 +65,7 @@ namespace LibraryManagementSystem.Service.src.Implementations
             }
             else
             {
-                throw new Exception();      // <<<------ add custom
+                throw ExceptionHandler.UpdateException();
             } 
         }
 

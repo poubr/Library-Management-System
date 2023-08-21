@@ -38,6 +38,7 @@ namespace LibraryManagementSystem.Infrastructure.src.Implementations
 
         public async Task<IEnumerable<T>> GetAll(QueryOptions queryOptions)
         {
+            // TODO: add search, sort, and filter options
             int skip = (queryOptions.PageNumber - 1) * queryOptions.PageSize;
             var query = _dbSet.AsQueryable();
             query = query.Skip(skip).Take(queryOptions.PageSize);

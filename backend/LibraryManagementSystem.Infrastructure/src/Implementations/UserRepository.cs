@@ -23,7 +23,7 @@ namespace LibraryManagementSystem.Infrastructure.src.Implementations
 
         public async Task<User> CreateAdmin(User user)
         {
-            user.Roles = Roles.Admin;
+            user.Role = Role.Admin;
             await _users.AddAsync(user);
             return user;
         }

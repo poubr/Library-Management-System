@@ -4,6 +4,7 @@ using LibraryManagementSystem.Domain.src.RepositoryInterfaces;
 using LibraryManagementSystem.Domain.src.Shared;
 using LibraryManagementSystem.Service.src.Abstractions;
 using LibraryManagementSystem.Service.src.Dtos;
+using LibraryManagementSystem.Service.src.Shared;
 
 namespace LibraryManagementSystem.Service.src.Implementations
 {
@@ -18,8 +19,16 @@ namespace LibraryManagementSystem.Service.src.Implementations
 
         public async Task<IEnumerable<LoanReadDto>> GetLoansByUser(Guid id, QueryOptions queryOptions)
         {
-            IEnumerable<Loan> userLoans = await _loanRepository.GetLoansByUser(id, queryOptions);
-            return _mapper.Map<IEnumerable<LoanReadDto>>(userLoans);
+            try
+            {
+                IEnumerable<Loan> userLoans = await _loanRepository.GetLoansByUser(id, queryOptions);
+                return _mapper.Map<IEnumerable<LoanReadDto>>(userLoans);
+            }
+            catch
+            {
+                throw ExceptionHandler.NotFoundException();
+            }
+
         }
     }
 }

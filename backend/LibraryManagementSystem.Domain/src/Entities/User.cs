@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace LibraryManagementSystem.Domain.src.Entities
 {
     public class User : BaseEntity 
@@ -7,10 +9,11 @@ namespace LibraryManagementSystem.Domain.src.Entities
         public String Password { get; set; } = string.Empty;
         public String Email { get; set; } = string.Empty;
         public String Address { get; set; } = string.Empty;
-        public Roles Roles { get; set; } = Roles.User;
+        public Role Role { get; set; } = Role.User;
     }
 
-    public enum Roles
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum Role
     {
         Admin,
         User

@@ -13,6 +13,7 @@ namespace LibraryManagementSystem.Infrastructure.src.Database
     public class DatabaseContext : DbContext
     {
         private readonly IConfiguration _configuration;
+        private readonly string _adminPassword;
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Genre> Genres { get; set; }
@@ -22,26 +23,33 @@ namespace LibraryManagementSystem.Infrastructure.src.Database
         public DatabaseContext(IConfiguration configuration)
         {
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _adminPassword = _configuration["AdminPassword"]!;
+        }
+
+        static DatabaseContext()
+        {
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+            AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var builder = new Npgsql.NpgsqlDataSourceBuilder(_configuration.GetConnectionString("DatabaseConnection"));
+            builder.MapEnum<Role>();
+            optionsBuilder.AddInterceptors(new TimeStampInterceptor());
             optionsBuilder.UseNpgsql(builder.Build()).UseSnakeCaseNamingConvention();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        {   
+            modelBuilder.HasPostgresEnum<Role>();
+
             modelBuilder.Entity<Genre>()
                 .Property(genre => genre.GenreName)
                 .HasConversion<string>();
 
             modelBuilder.Entity<Loan>()
                 .Property(loan => loan.Status)
-                .HasConversion<string>();
-
-            modelBuilder.Entity<User>()
-                .Property(user => user.Roles)
                 .HasConversion<string>();
             
             modelBuilder.Entity<User>()
@@ -57,30 +65,12 @@ namespace LibraryManagementSystem.Infrastructure.src.Database
                         Id = Guid.NewGuid(),
                         FirstName = "Admin",
                         LastName = "McAdmin",
-                        Password = BCryptNet.HashPassword("Admin123"),
+                        Password = BCryptNet.HashPassword(_adminPassword),
                         Email = "admin@test.com",
                         Address = "Admin Street 00100",
-                        Roles = Roles.Admin
+                        Role = Role.Admin
                     }
                 );
-        }
-
-        public override int SaveChanges()
-        {
-            var entries = ChangeTracker.Entries()
-                .Where(e => e.Entity is BaseEntity && (
-                    e.State == EntityState.Added || e.State == EntityState.Modified));
-
-            foreach (var entry in entries)
-            {
-                var entity = (BaseEntity)entry.Entity;
-                entity.UpdatedAt = DateTime.Now;
-                if (entry.State == EntityState.Added)
-                {
-                    entity.CreatedAt = DateTime.Now;
-                }
-            }
-            return base.SaveChanges();
         }
     }
 }
